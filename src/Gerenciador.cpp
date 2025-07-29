@@ -22,18 +22,13 @@ void Gerenciador::comandos(Grafo* grafo) {
             case 'a': {
                 // INICIALIZAÇÃO DA INSTÂNCIA "Guloso"
                 Guloso guloso;
-
                 // CHAMA O ALGORITMO E ARMAZENA O RESULTADO
                 std::vector<No*> conjunto_dominante = guloso.algoritmo_guloso(grafo);
-
-                
                 std::cout << "#########################################" << std::endl;
                 // IMPRIME O CONJUNTO DE VÉRTICES DO GRAFO 
                 grafo->imprimirListaNos();
-
                 // IMPRIME A LISTA DE ADJACÊNCIA DO GRAFO 
                 grafo->imprimirListaDeAdjacencia();
-
                 // EXIBIÇÃO DO RESULTADO DO ALGORITMO GULOSO
                 std::cout << "\n--- RESULTADO DO ALGORITMO GULOSO ---" << std::endl;
                 std::cout << "O conjunto dominante encontrado tem " << conjunto_dominante.size() << " vertices." << std::endl;
