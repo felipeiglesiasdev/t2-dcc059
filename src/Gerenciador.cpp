@@ -43,12 +43,46 @@ void Gerenciador::comandos(Grafo* grafo) {
 
             // ALGORITMO GULOSO RANDOMIZADO ADAPTATIVO
             case 'b': {
-                
+                // INICIALIZAÇÃO DA INSTÂNCIA "Guloso"
+                Guloso guloso;
+                // CHAMA O ALGORITMO E ARMAZENA O RESULTADO
+                std::vector<No*> conjunto_dominante = guloso.algoritmo_guloso_randomizado_adaptativo(grafo);
+                std::cout << "#########################################" << std::endl;
+                // IMPRIME O CONJUNTO DE VÉRTICES DO GRAFO 
+                grafo->imprimirListaNos();
+                // IMPRIME A LISTA DE ADJACÊNCIA DO GRAFO 
+                grafo->imprimirListaDeAdjacencia();
+                // EXIBIÇÃO DO RESULTADO DO ALGORITMO GULOSO RANDOMIZADO ADAPTATIVO
+                std::cout << "\n--- RESULTADO DO ALGORITMO GULOSO RANDOMIZADO ADAPTATIVO ---" << std::endl;
+                std::cout << "O conjunto dominante encontrado tem " << conjunto_dominante.size() << " vertices." << std::endl;
+                std::cout << "Conjunto S = { ";
+                for (size_t i = 0; i < conjunto_dominante.size(); ++i) {
+                    std::cout << conjunto_dominante[i]->getId() << (i == conjunto_dominante.size() - 1 ? "" : ", ");
+                }
+                std::cout << " }" << std::endl << std::endl;
+                std::cout << "#########################################" << std::endl;
                 break;
             }
             // ALGORITMO GULOSO RANDOMIZADO ADAPTATIVO REATIVO
             case 'c': {
-                
+                // INICIALIZAÇÃO DA INSTÂNCIA "Guloso"
+                Guloso guloso;
+                // CHAMA O ALGORITMO E ARMAZENA O RESULTADO
+                std::vector<No*> conjunto_dominante = guloso.algoritmo_guloso_randomizado_adaptativo_reativo(grafo);
+                std::cout << "#########################################" << std::endl;
+                // IMPRIME O CONJUNTO DE VÉRTICES DO GRAFO 
+                grafo->imprimirListaNos();
+                // IMPRIME A LISTA DE ADJACÊNCIA DO GRAFO 
+                grafo->imprimirListaDeAdjacencia();
+                // EXIBIÇÃO DO RESULTADO DO ALGORITMO GULOSO RANDOMIZADO ADAPTATIVO REATIVO
+                std::cout << "\n--- RESULTADO DO ALGORITMO GULOSO RANDOMIZADO ADAPTATIVO REATIVO---" << std::endl;
+                std::cout << "O conjunto dominante encontrado tem " << conjunto_dominante.size() << " vertices." << std::endl;
+                std::cout << "Conjunto S = { ";
+                for (size_t i = 0; i < conjunto_dominante.size(); ++i) {
+                    std::cout << conjunto_dominante[i]->getId() << (i == conjunto_dominante.size() - 1 ? "" : ", ");
+                }
+                std::cout << " }" << std::endl << std::endl;
+                std::cout << "#########################################" << std::endl;
                 break;
             }
             // SAIR DO PROGRAMA

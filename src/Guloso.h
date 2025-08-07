@@ -16,9 +16,10 @@ class Guloso
         // RECEBE UM GRAFO E RETORNA O CONJUNTO DE NÓS DA SOLUÇÃO
         std::vector<No*> algoritmo_guloso(Grafo* grafo);
         //       
-        //Grafo* algoritmo_guloso_randomizado_adaptativo();
+        std::vector<No*> algoritmo_guloso_randomizado_adaptativo(Grafo* grafo);
         //
-        //Grafo* algoritmo_guloso_randomizado_adaptativo_reativo();       
+        std::vector<No*> algoritmo_guloso_randomizado_adaptativo_reativo(Grafo* grafo) ;
+
 };
 
 
