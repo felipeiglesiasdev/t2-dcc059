@@ -10,128 +10,7 @@
 //-------------------------------║  ALGORTIMO GULOSO  ║------------------------------------------
 //-------------------------------╚════════════════════╝------------------------------------------
 std::vector<No*> Guloso::algoritmo_guloso(Grafo* grafo) {
-    //===========================================================================================
-    // =============================== GRAFOS DIRECIONADOS ======================================
-    //===========================================================================================
-    if (grafo->isDirecionado()) {
-        // 'S' É O VETOR QUE GUARDARÁ OS NÓS DA SOLUÇÃO FINAL (CONJUNTO DOMINANTE).
-        std::vector<No*> S;
 
-        // 'dominados' É UM CONJUNTO (SET) QUE ARMAZENA PONTEIROS PARA OS NÓS JÁ COBERTOS.
-        std::set<No*> dominados;
-
-        // 'total_nos' ARMAZENA A ORDEM DO GRAFO (NÚMERO TOTAL DE VÉRTICES).
-        int total_nos = grafo->getOrdem();
-
-        // SE O GRAFO ESTIVER VAZIO (NENHUM NÓ), RETORNA UMA SOLUÇÃO VAZIA.
-        if (total_nos == 0) {
-            // RETORNA O VETOR 'S' VAZIO.
-            return S;
-        }
-
-        //----------------------------------------------------------------------------------
-        // ESCOLHER O PONTO DE PARTIDA, OU SEJA, O NÓ INICIAL
-        // A HEURÍSTICA AQUI É ESCOLHER O NÓ DE MAIOR GRAU DE SAÍDA.
-        //----------------------------------------------------------------------------------
-
-        // 'no_inicial' GUARDARÁ O PONTEIRO PARA O NÓ ESCOLHIDO PARA INICIAR A SOLUÇÃO.
-        No* no_inicial = nullptr;
-        // 'max_grau_saida_inicial' ARMAZENA O MAIOR GRAU DE SAÍDA ENCONTRADO. INICIA COM -1.
-        int max_grau_saida_inicial = -1;
-
-        // 'nos_grafo' RECEBE UMA REFERÊNCIA CONSTANTE PARA A LISTA DE TODOS OS NÓS DO GRAFO.
-        const std::vector<No*>& nos_grafo = grafo->getListaNos();
-
-        // PERCORRE A LISTA DE TODOS OS NÓS DO GRAFO PARA ENCONTRAR O DE MAIOR GRAU DE SAÍDA.
-        for (No* no_atual : nos_grafo) {
-            // getArestas().size() EM UM GRAFO DIRECIONADO FORNECE O GRAU DE SAÍDA.
-            int grau_saida_atual = no_atual->getArestas().size();
-            
-            // VERIFICA SE O GRAU DE SAÍDA DO NÓ ATUAL É MAIOR QUE O MÁXIMO JÁ REGISTRADO.
-            if (grau_saida_atual > max_grau_saida_inicial) {
-                // SE FOR, ATUALIZA O GRAU MÁXIMO.
-                max_grau_saida_inicial = grau_saida_atual;
-                // E ATUALIZA O 'no_inicial' PARA SER O NÓ ATUAL.
-                no_inicial = no_atual;
-            }
-        }
-
-        // APÓS ACHAR O NÓ DE MAIOR GRAU DE SAÍDA, INICIAMOS A SOLUÇÃO COM ELE.
-        if (no_inicial) {
-            // ADICIONA O NÓ INICIAL AO CONJUNTO SOLUÇÃO 'S'.
-            S.push_back(no_inicial);
-            // ADICIONA O PRÓPRIO NÓ INICIAL AO CONJUNTO DE NÓS DOMINADOS.
-            dominados.insert(no_inicial);
-            // PERCORRE TODOS OS VIZINHOS DE SAÍDA DO NÓ INICIAL.
-            for (Aresta* aresta : no_inicial->getArestas()) {
-                // ADICIONA CADA VIZINHO DE SAÍDA AO CONJUNTO DE NÓS DOMINADOS.
-                dominados.insert(aresta->getNoAlvo());
-            }
-        }
-
-        //----------------------------------------------------------------------------------
-        // LOOP PRINCIPAL DO ALGORITMO GULOSO
-        // ESTE LOOP CONTINUA ATÉ QUE TODOS OS NÓS DO GRAFO ESTEJAM DOMINADOS.
-        //----------------------------------------------------------------------------------
-        while (static_cast<int>(dominados.size()) < total_nos) {
-            // 'melhor_candidato' ARMAZENARÁ O NÓ QUE DOMINA O MAIOR NÚMERO DE NÓS AINDA NÃO COBERTOS.
-            No* melhor_candidato = nullptr;
-            // 'max_novos_dominados' GUARDA O NÚMERO MÁXIMO DE NOVOS NÓS DOMINADOS POR UM CANDIDATO.
-            int max_novos_dominados = -1;
-
-            // PERCORRE TODOS OS NÓS DO GRAFO PARA AVALIÁ-LOS COMO CANDIDATOS.
-            for (No* candidato : nos_grafo) {
-                // VERIFICA SE O CANDIDATO ATUAL JÁ FAZ PARTE DA SOLUÇÃO 'S'.
-                bool candidato_ja_esta_em_S = (std::find(S.begin(), S.end(), candidato) != S.end());
-                // SE O CANDIDATO JÁ ESTIVER EM 'S', ELE NÃO PODE SER ESCOLHIDO NOVAMENTE.
-                if (candidato_ja_esta_em_S) {
-                    // PULA PARA A PRÓXIMA ITERAÇÃO DO LOOP.
-                    continue;
-                }
-
-                // 'novos_dominados_count' CALCULA QUANTOS NÓS *AINDA NÃO DOMINADOS* ESTE CANDIDATO PODE DOMINAR.
-                int novos_dominados_count = 0;
-                // VERIFICA SE O PRÓPRIO CANDIDATO JÁ FOI DOMINADO.
-                if (dominados.find(candidato) == dominados.end()) {
-                    // SE NÃO FOI, ELE CONTA COMO UM NOVO NÓ A SER DOMINADO.
-                    novos_dominados_count++;
-                }
-                // PERCORRE OS VIZINHOS DE SAÍDA DO CANDIDATO.
-                for (Aresta* aresta : candidato->getArestas()) {
-                    // VERIFICA SE O VIZINHO DE SAÍDA JÁ FOI DOMINADO.
-                    if (dominados.find(aresta->getNoAlvo()) == dominados.end()) {
-                        // SE O VIZINHO AINDA NÃO FOI DOMINADO, INCREMENTA O CONTADOR.
-                        novos_dominados_count++;
-                    }
-                }
-                // COMPARA A CONTAGEM DE NOVOS DOMINADOS DO CANDIDATO ATUAL COM O MÁXIMO ENCONTRADO NESTA RODADA.
-                if (novos_dominados_count > max_novos_dominados) {
-                    // SE O CANDIDATO ATUAL É MELHOR, ATUALIZA O MÁXIMO.
-                    max_novos_dominados = novos_dominados_count;
-                    // E DEFINE O CANDIDATO ATUAL COMO O 'melhor_candidato'.
-                    melhor_candidato = candidato;
-                }
-            }
-            
-            // AO FINAL DO LOOP, VERIFICA SE UM 'melhor_candidato' FOI ENCONTRADO E SE ELE DOMINA ALGUÉM NOVO.
-            if (melhor_candidato && max_novos_dominados > 0) {
-                // SE SIM, ADICIONA O MELHOR CANDIDATO À SOLUÇÃO FINAL 'S'.
-                S.push_back(melhor_candidato);
-                // MARCA O CANDIDATO E SEUS VIZINHOS DE SAÍDA COMO DOMINADOS.
-                dominados.insert(melhor_candidato);
-                // PERCORRE OS VIZINHOS DE SAÍDA DO CANDIDATO ESCOLHIDO.
-                for (Aresta* aresta : melhor_candidato->getArestas()) {
-                    // E ADICIONA CADA UM AO CONJUNTO DE DOMINADOS.
-                    dominados.insert(aresta->getNoAlvo());
-                }
-            } else {
-                // SE NENHUM CANDIDATO PODE DOMINAR NOVOS NÓS, O ALGORITMO TERMINOU.
-                break;
-            }
-        }
-        // RETORNA O CONJUNTO SOLUÇÃO 'S' ENCONTRADO.
-        return S;
-    }
     //===========================================================================================
     // =============================== GRAFOS NÃO DIRECIONADOS ======================================
     //===========================================================================================
@@ -202,7 +81,7 @@ std::vector<No*> Guloso::algoritmo_guloso(Grafo* grafo) {
         int tamanho_S = S.size();
 
         // PARA CADA NÓ QUE JÁ ESTÁ NA SOLUÇÃO 'S'
-        for (int i = 0; i < tamanho_S; ++i) { 
+        for (int i = 0; i < tamanho_S; i++) { 
             // PEGAMOS O PONTEIRO PARA O NÓ ATUAL EM 'S'
             No* no_em_s = S[i];
             
@@ -211,7 +90,7 @@ std::vector<No*> Guloso::algoritmo_guloso(Grafo* grafo) {
             int num_arestas = arestas_do_no_em_s.size();
 
             // PERCORRE ESSA LISTA DE VIZINHOS
-            for (int j = 0; j < num_arestas; ++j) {
+            for (int j = 0; j < num_arestas; j++) {
                 // PEGAMOS O PONTEIRO PARA O NÓ VIZINHO
                 No* vizinho = arestas_do_no_em_s[j]->getNoAlvo();
                 
@@ -238,7 +117,7 @@ std::vector<No*> Guloso::algoritmo_guloso(Grafo* grafo) {
         int num_candidatos = candidatos.size();
 
         // PARA CADA CANDIDATO NA LISTA
-        for (int k = 0; k < num_candidatos; ++k) {
+        for (int k = 0; k < num_candidatos; k++) {
             // PONTEIRO PARA O CANDIDATO ATUAL
             No* candidato = candidatos[k];
             
