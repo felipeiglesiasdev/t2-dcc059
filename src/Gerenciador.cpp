@@ -1,10 +1,11 @@
 #include "Gerenciador.h"
-#include <fstream>  // Para std::ofstream
-#include <limits>   // Para std::numeric_limits
-#include <vector>   // Para std::vector
-#include <iostream> // Para std::cout, std::endl, std::cerr
+#include <fstream>   // Para std::ofstream
+#include <limits>    // Para std::numeric_limits
+#include <vector>    // Para std::vector
+#include <iostream>  // Para std::cout, std::endl, std::cerr
 #include <algorithm> // Para std::find
 #include <numeric>
+#include <chrono>    //Para medir tempo de execução
 
 void Gerenciador::comandos(Grafo* grafo) {
     while (true) {
@@ -95,14 +96,21 @@ void Gerenciador::comandos(Grafo* grafo) {
                 std::cout << "\n--- MEDIA DO RESULTADO DO ALGORITMO GULOSO (10 EXECUCOES) ---" << std::endl;
                 Guloso guloso;
                 std::vector<int> tamanhos;
+                std::vector<double> tempos;
                 for (int i = 0; i < 10; ++i) {
+                    auto start = std::chrono::high_resolution_clock::now();
                     std::vector<No*> solucao;
                     solucao = guloso.algoritmo_guloso(grafo);
+                    auto end = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double, std::milli> duracao = end - start;
+                    tempos.push_back(duracao.count());
                     int tamanho = solucao.size();
                     tamanhos.push_back(tamanho);
                 }
                 double media = std::accumulate(tamanhos.begin(), tamanhos.end(), 0.0) / 10.0;
+                double media_tempo = std::accumulate(tempos.begin(), tempos.end(), 0.0) / 10.0;
                 std::cout << "Para o algoritmo guloso, a media de 10 execucoes eh de " << media << " vertices." << std::endl;
+                std::cout << "Tempo medio de execucao: " << media_tempo << " ms." << std::endl;
                 std::cout << "\n###############################################################" << std::endl;
                 break;
             }
@@ -112,14 +120,21 @@ void Gerenciador::comandos(Grafo* grafo) {
                 std::cout << "\n--- MEDIA DO RESULTADO DO ALGORITMO GULOSO RANDOMIZADO ADAPTATIVO (10 EXECUCOES) ---" << std::endl;
                 Guloso guloso;
                 std::vector<int> tamanhos;
+                std::vector<double> tempos;
                 for (int i = 0; i < 10; ++i) {
+                    auto start = std::chrono::high_resolution_clock::now();
                     std::vector<No*> solucao;
                     solucao = guloso.algoritmo_guloso_randomizado_adaptativo(grafo);
+                    auto end = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double, std::milli> duracao = end - start;
+                    tempos.push_back(duracao.count());
                     int tamanho = solucao.size();
                     tamanhos.push_back(tamanho);
                 }
                 double media = std::accumulate(tamanhos.begin(), tamanhos.end(), 0.0) / 10.0;
+                double media_tempo = std::accumulate(tempos.begin(), tempos.end(), 0.0) / 10.0;
                 std::cout << "Para o algoritmo guloso randomizado adaptativo, a media de 10 execucoes eh de " << media << " vertices." << std::endl;
+                std::cout << "Tempo medio de execucao: " << media_tempo << " ms." << std::endl;
                 std::cout << "\n###############################################################" << std::endl;
                 break;
             }
@@ -129,14 +144,21 @@ void Gerenciador::comandos(Grafo* grafo) {
                 std::cout << "\n--- MEDIA DO RESULTADO DO ALGORITMO GULOSO RANDOMIZADO ADAPTATIVO REATIVO (10 EXECUCOES) ---" << std::endl;
                 Guloso guloso;
                 std::vector<int> tamanhos;
+                std::vector<double> tempos;
                 for (int i = 0; i < 10; ++i) {
+                    auto start = std::chrono::high_resolution_clock::now();
                     std::vector<No*> solucao3;
                     solucao3 = guloso.algoritmo_guloso_randomizado_adaptativo_reativo(grafo);
                     int tamanho = solucao3.size();
+                    auto end = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double, std::milli> duracao = end - start;
+                    tempos.push_back(duracao.count());
                     tamanhos.push_back(tamanho);
                 }
                 double media = std::accumulate(tamanhos.begin(), tamanhos.end(), 0.000) / 10.00;
+                double media_tempo = std::accumulate(tempos.begin(), tempos.end(), 0.0) / 10.0;
                 std::cout << "Para o algoritmo guloso randomizado adaptativo reativo, a media de 10 execucoes eh de " << media << " vertices." << std::endl;
+                std::cout << "Tempo medio de execucao: " << media_tempo << " ms." << std::endl;
                 std::cout << "\n###############################################################" << std::endl;
                 break;
             }
