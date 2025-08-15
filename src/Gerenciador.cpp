@@ -4,6 +4,7 @@
 #include <vector>   // Para std::vector
 #include <iostream> // Para std::cout, std::endl, std::cerr
 #include <algorithm> // Para std::find
+#include <numeric>
 
 void Gerenciador::comandos(Grafo* grafo) {
     while (true) {
@@ -11,6 +12,9 @@ void Gerenciador::comandos(Grafo* grafo) {
         std::cout << "(a) Algoritmo Guloso;" << std::endl;
         std::cout << "(b) Algoritmo Guloso Randomizado Adaptativo;" << std::endl;
         std::cout << "(c) Algoritmo Guloso Randomizado Adaptativo Reativo;" << std::endl;
+        std::cout << "(d) Media do Algoritmo Guloso (10 execucoes)\n";
+        std::cout << "(e) Media do Algoritmo Guloso Randomizado Adaptativo (10 execucoes)\n";
+        std::cout << "(f) Media do Algoritmo Guloso Randomizado Adaptativo Reativo (10 execucoes)\n";
         std::cout << "(0) Sair;" << std::endl << std::endl;
 
         char resp;
@@ -85,6 +89,59 @@ void Gerenciador::comandos(Grafo* grafo) {
                 std::cout << "#########################################" << std::endl;
                 break;
             }
+
+            case 'd': {
+                std::cout << "###############################################################" << std::endl;
+                std::cout << "\n--- MEDIA DO RESULTADO DO ALGORITMO GULOSO (10 EXECUCOES) ---" << std::endl;
+                Guloso guloso;
+                std::vector<int> tamanhos;
+                for (int i = 0; i < 10; ++i) {
+                    std::vector<No*> solucao;
+                    solucao = guloso.algoritmo_guloso(grafo);
+                    int tamanho = solucao.size();
+                    tamanhos.push_back(tamanho);
+                }
+                double media = std::accumulate(tamanhos.begin(), tamanhos.end(), 0.0) / 10.0;
+                std::cout << "Para o algoritmo guloso, a media de 10 execucoes eh de " << media << " vertices." << std::endl;
+                std::cout << "\n###############################################################" << std::endl;
+                break;
+            }
+
+            case 'e': {
+                std::cout << "###############################################################" << std::endl;
+                std::cout << "\n--- MEDIA DO RESULTADO DO ALGORITMO GULOSO RANDOMIZADO ADAPTATIVO (10 EXECUCOES) ---" << std::endl;
+                Guloso guloso;
+                std::vector<int> tamanhos;
+                for (int i = 0; i < 10; ++i) {
+                    std::vector<No*> solucao;
+                    solucao = guloso.algoritmo_guloso_randomizado_adaptativo(grafo);
+                    int tamanho = solucao.size();
+                    tamanhos.push_back(tamanho);
+                }
+                double media = std::accumulate(tamanhos.begin(), tamanhos.end(), 0.0) / 10.0;
+                std::cout << "Para o algoritmo guloso randomizado adaptativo, a media de 10 execucoes eh de " << media << " vertices." << std::endl;
+                std::cout << "\n###############################################################" << std::endl;
+                break;
+            }
+
+            case 'f': {
+                std::cout << "###############################################################" << std::endl;
+                std::cout << "\n--- MEDIA DO RESULTADO DO ALGORITMO GULOSO RANDOMIZADO ADAPTATIVO REATIVO (10 EXECUCOES) ---" << std::endl;
+                Guloso guloso;
+                std::vector<int> tamanhos;
+                for (int i = 0; i < 10; ++i) {
+                    std::vector<No*> solucao3;
+                    solucao3 = guloso.algoritmo_guloso_randomizado_adaptativo_reativo(grafo);
+                    int tamanho = solucao3.size();
+                    tamanhos.push_back(tamanho);
+                }
+                double media = std::accumulate(tamanhos.begin(), tamanhos.end(), 0.000) / 10.00;
+                std::cout << "Para o algoritmo guloso randomizado adaptativo reativo, a media de 10 execucoes eh de " << media << " vertices." << std::endl;
+                std::cout << "\n###############################################################" << std::endl;
+                break;
+            }
+
+
             // SAIR DO PROGRAMA
             case '0': {
                 return;

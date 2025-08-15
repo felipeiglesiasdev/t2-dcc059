@@ -159,8 +159,8 @@ std::vector<No*> Guloso::algoritmo_guloso_randomizado_adaptativo(Grafo* grafo) {
     //==================================================================================
     // INICIALIZAÇÃO  
     //==================================================================================
-    const int max_iteracoes = 50;
-    const double alfa = 0.2;
+    const int max_iteracoes = 20;
+    const double alfa = 0.9;
 
     std::vector<No*> melhor_solucao_global;
     int tamanho_melhor_solucao = std::numeric_limits<int>::max();
@@ -351,12 +351,12 @@ std::vector<No*> Guloso::algoritmo_guloso_randomizado_adaptativo_reativo(Grafo* 
     //------------╚═════════════════════════════════╝-------------
 
     //--- PARÂMETROS FIXOS DO GRASP REATIVO ---
-    const int max_iteracoes = 100; // AUMENTAMOS AS ITERAÇÕES PARA DAR TEMPO AO ALGORITMO DE APRENDER.
-    const int intervalo_atualizacao = 20; // A CADA 20 ITERAÇÕES, AS PROBABILIDADES SERÃO RECALCULADAS.
+    const int max_iteracoes = 300; // AUMENTAMOS AS ITERAÇÕES PARA DAR TEMPO AO ALGORITMO DE APRENDER.
+    const int intervalo_atualizacao = 30; // A CADA 30 ITERAÇÕES, AS PROBABILIDADES SERÃO RECALCULADAS.
 
     //--- MECANISMO REATIVO: CONJUNTO DE ALFAS E ESTATÍSTICAS ---
     // ESTE É O "CARDÁPIO" DE VALORES DE ALFA QUE O ALGORITMO PODE ESCOLHER.
-    std::vector<double> conjunto_alfas = {0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40};
+    std::vector<double> conjunto_alfas = {0.10, 0.50, 0.90};
     // 'somas_solucoes' GUARDA A SOMA DOS TAMANHOS DE TODAS AS SOLUÇÕES GERADAS POR CADA ALFA.
     std::vector<double> somas_solucoes(conjunto_alfas.size(), 0.0);
     // 'usos_alfa' CONTA QUANTAS VEZES CADA ALFA FOI USADO.
